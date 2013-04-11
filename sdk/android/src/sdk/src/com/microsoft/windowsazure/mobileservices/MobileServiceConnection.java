@@ -23,6 +23,7 @@ See the Apache Version 2.0 License for specific language governing permissions a
 
 package com.microsoft.windowsazure.mobileservices;
 
+import org.apache.http.Header;
 import org.apache.http.protocol.HTTP;
 
 import android.os.Build;
@@ -139,6 +140,13 @@ class MobileServiceConnection {
 	 *            The request to configure
 	 */
 	private void configureHeadersOnRequest(ServiceFilterRequest request) {
+		//Check to see if they already have the headers added (retry request)
+		Header[] headers = request.getHeaders();
+		for (Header header : headers) {
+			if (header.getName().equals(X_ZUMO_AUTH_HEADER))
+				return;
+		}
+		
 		// Add the authentication header if the user is logged in
 		MobileServiceUser user = mClient.getCurrentUser();
 		if (user != null && user.getAuthenticationToken() != "") {

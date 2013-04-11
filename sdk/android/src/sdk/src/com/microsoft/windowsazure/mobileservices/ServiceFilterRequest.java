@@ -94,4 +94,20 @@ public interface ServiceFilterRequest {
 	 * @throws Exception
 	 */
 	public ServiceFilterResponse execute() throws Exception;
+	
+	//Accessor methods for previous request types
+	public ServiceFilterRequest getPreviousRequest();
+	public void setPreviousRequest(ServiceFilterRequest request);
+	public TableJsonOperationCallback getPreviousCallback();
+	public void setPrevoiusCallback(TableJsonOperationCallback callback);
+	public TableJsonQueryCallback getPreviousQueryCallback();
+	public void setPreviousQueryCallback(TableJsonQueryCallback callback);
+	public TableDeleteCallback getPreviousDeleteCallback();
+	public void setPreviousDeleteCallback(TableDeleteCallback callback);
+	public String getPreviousCalltype();
+	public void setPreviousCalltype(String calltype);
+	public MobileServiceTableBase getPreviousRequestTable();
+	public void setPreviousRequestTable(MobileServiceTableBase mobileServiceTableBase);
+	
+	
 }

@@ -25,7 +25,6 @@ import java.security.InvalidParameterException;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPatch;
 import org.apache.http.client.methods.HttpPost;
@@ -35,7 +34,6 @@ import android.util.Pair;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 /**
  * Represents a Mobile Service Table
@@ -59,7 +57,7 @@ MobileServiceTableBase<TableJsonQueryCallback> {
 	 * Retrieves a set of rows from the table using a query
 	 * 
 	 * @param query
-	 *            The query used to retrieve the rows       
+	 *            The query used to retrieve the rows
 	 * @param callback
 	 *            Callback to invoke when the operation is completed
 	 */
@@ -170,17 +168,17 @@ MobileServiceTableBase<TableJsonQueryCallback> {
 
 	/**
 	 * Inserts a JsonObject into a Mobile Service table
-	 * 
+	 *
 	 * @param element
 	 *            The JsonObject to insert
 	 * @param callback
 	 *            Callback to invoke when the operation is completed
-	 * @throws InvalidParameterException   
+	 * @throws InvalidParameterException
 	 */
 	public void insert(final JsonObject element, TableJsonOperationCallback callback) {
 		this.insert(element, null, callback);
 	}
-	
+
 	/**
 	 * Inserts a JsonObject into a Mobile Service Table
 	 * 
@@ -211,7 +209,6 @@ MobileServiceTableBase<TableJsonQueryCallback> {
 			Uri.Builder uriBuilder = Uri.parse(mClient.getAppUrl().toString()).buildUpon();
 			uriBuilder.path(TABLES_URL);
 			uriBuilder.appendPath(URLEncoder.encode(mTableName, MobileServiceClient.UTF8_ENCODING));
-
 			if (parameters != null && parameters.size() > 0) {
 				for (Pair<String, String> parameter : parameters) {
 					uriBuilder.appendQueryParameter(parameter.first, parameter.second);
@@ -234,6 +231,8 @@ MobileServiceTableBase<TableJsonQueryCallback> {
 			return;
 		}
 
+		post.setPreviousCalltype("INSERT");
+		post.setPreviousRequestTable(this);
 		executeTableOperation(post, new TableJsonOperationCallback() {
 
 			@Override
@@ -323,7 +322,8 @@ MobileServiceTableBase<TableJsonQueryCallback> {
 			}
 			return;
 		}
-
+		patch.setPreviousCalltype("UPDATE");
+		patch.setPreviousRequestTable(this);
 		executeTableOperation(patch, new TableJsonOperationCallback() {
 
 			@Override
@@ -352,29 +352,15 @@ MobileServiceTableBase<TableJsonQueryCallback> {
 	 */
 	private void executeTableOperation(ServiceFilterRequest request,
 			final TableJsonOperationCallback callback) {
+		//TODO:Test
+		request.setPreviousRequest(request);
+		request.setPrevoiusCallback(callback);
+		
 		// Create AsyncTask to execute the operation
-		new RequestAsyncTask(request, mClient.createConnection()) {
-			@Override
-			protected void onPostExecute(ServiceFilterResponse result) {
-				if (callback != null) {
-					JsonObject newEntityJson = null;
-					if (mTaskException == null && result != null) {
-						String content = null;
-						content = result.getContent();
-
-						newEntityJson = new JsonParser().parse(content)
-								.getAsJsonObject();
-
-						callback.onCompleted(newEntityJson, null, result);
-
-					} else {
-						callback.onCompleted(null, mTaskException, result);
-						;
-					}
-				}
-			}
-		}.execute();
+		executeInsertUpdateRequest(request, callback);
 	}
+
+	
 
 	/**
 	 * Retrieves a set of rows from using the specified URL
@@ -389,56 +375,17 @@ MobileServiceTableBase<TableJsonQueryCallback> {
 		ServiceFilterRequest request = new ServiceFilterRequestImpl(
 				new HttpGet(url));
 
-		MobileServiceConnection conn = mClient.createConnection();
+		//TODO:Test
+		request.setPreviousRequest(request);
+		request.setPreviousQueryCallback(callback);
+		request.setPreviousCalltype("GET");
+		request.setPreviousRequestTable(this);
+				
 		// Create AsyncTask to execute the request and parse the results
-		new RequestAsyncTask(request, conn) {
-			@Override
-			protected void onPostExecute(ServiceFilterResponse response) {
-				if (callback != null) {
-					if (mTaskException == null && response != null) {
-						JsonElement results = null;
-
-						int count = 0;
-
-						try {
-							// Parse the results using the given Entity class
-							String content = response.getContent();
-							JsonElement json = new JsonParser().parse(content);
-
-							if (json.isJsonObject()) {
-								JsonObject jsonObject = json.getAsJsonObject();
-								// If the response has count property, store its
-								// value
-								if (jsonObject.has("results")
-										&& jsonObject.has("count")) { // inlinecount
-									// result
-									count = jsonObject.get("count").getAsInt();
-									results = jsonObject.get("results");
-								} else {
-									results = json;
-								}
-							} else {
-								results = json;
-							}
-						} catch (Exception e) {
-							callback.onCompleted(
-									null,
-									0,
-									new MobileServiceException(
-											"Error while retrieving data from response.",
-											e), response);
-							return;
-						}
-
-						callback.onCompleted(results, count, null, response);
-
-					} else {
-						callback.onCompleted(null, 0, mTaskException, response);
-					}
-				}
-			}
-		}.execute();
+		executeGetRequest(callback, request);
 	}
+
+	
 
 	/**
 	 * Updates the JsonObject to have an id property

@@ -34,6 +34,8 @@ import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import android.util.Log;
+
 /**
  * 
  * ServiceFilterRequest implementation
@@ -117,4 +119,26 @@ class ServiceFilterRequestImpl implements ServiceFilterRequest {
 	public String getMethod() {
 		return mRequest.getMethod();
 	}
+	
+	//TODO:TEST
+	private ServiceFilterRequest mPreviousFilterRequest;
+	private TableJsonOperationCallback mPreviousCallback;
+	private TableJsonQueryCallback mPreviousQueryCallback;
+	private TableDeleteCallback mPreviousDeleteCallback;
+	private String mPreviousCallType;
+	private MobileServiceTableBase mPreviousMobileServiceTableBase;
+	
+	public ServiceFilterRequest getPreviousRequest() { return mPreviousFilterRequest; }
+	public void setPreviousRequest(ServiceFilterRequest request) { this.mPreviousFilterRequest = request; }
+	public TableJsonOperationCallback getPreviousCallback() { return mPreviousCallback; }
+	public void setPrevoiusCallback(TableJsonOperationCallback callback) { this.mPreviousCallback = callback; }
+	public TableJsonQueryCallback getPreviousQueryCallback() { return mPreviousQueryCallback; }
+	public void setPreviousQueryCallback(TableJsonQueryCallback callback) { this.mPreviousQueryCallback = callback; }
+	public TableDeleteCallback getPreviousDeleteCallback() { return this.mPreviousDeleteCallback; }
+	public void setPreviousDeleteCallback(TableDeleteCallback callback) { this.mPreviousDeleteCallback = callback; }
+	public String getPreviousCalltype() { return this.mPreviousCallType; }
+	public void setPreviousCalltype(String calltype) { this.mPreviousCallType = calltype; }
+	public MobileServiceTableBase getPreviousRequestTable() { return this.mPreviousMobileServiceTableBase; }
+	public void setPreviousRequestTable(MobileServiceTableBase mobileServiceTableBase) { this.mPreviousMobileServiceTableBase = mobileServiceTableBase; }
+	
 }

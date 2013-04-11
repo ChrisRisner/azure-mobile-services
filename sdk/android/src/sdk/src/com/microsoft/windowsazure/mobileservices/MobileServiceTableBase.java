@@ -35,7 +35,7 @@ import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-abstract class MobileServiceTableBase<E> {
+public abstract class MobileServiceTableBase<E> {
 
 	/**
 	 * Tables URI part
@@ -264,13 +264,98 @@ abstract class MobileServiceTableBase<E> {
 			}
 			return;
 		}
+		
+		//TODO:TEST
+		delete.setPreviousRequest(delete);
+		delete.setPreviousDeleteCallback(callback);
+		delete.setPreviousCalltype("DELETE");
+		delete.setPreviousRequestTable(this);
 
 		// Create AsyncTask to execute the request
+		executeDeleteRequest(callback, delete);
+	}
+
+	public void executeDeleteRequest(final TableDeleteCallback callback,
+			ServiceFilterRequest delete) {
 		new RequestAsyncTask(delete, mClient.createConnection()) {
 			@Override
 			protected void onPostExecute(ServiceFilterResponse result) {
 				if (callback != null) {
 					callback.onCompleted(mTaskException, result);
+				}
+			}
+		}.execute();
+	}
+	
+	public void executeGetRequest(final TableJsonQueryCallback callback,
+			ServiceFilterRequest request) {
+		MobileServiceConnection conn = mClient.createConnection();
+		new RequestAsyncTask(request, conn) {
+			@Override
+			protected void onPostExecute(ServiceFilterResponse response) {
+				if (callback != null) {
+					if (mTaskException == null && response != null) {
+						JsonElement results = null;
+
+						int count = 0;
+
+						try {
+							// Parse the results using the given Entity class
+							String content = response.getContent();
+							JsonElement json = new JsonParser().parse(content);
+
+							if (json.isJsonObject()) {
+								JsonObject jsonObject = json.getAsJsonObject();
+								// If the response has count property, store its
+								// value
+								if (jsonObject.has("results")
+										&& jsonObject.has("count")) { // inlinecount
+									// result
+									count = jsonObject.get("count").getAsInt();
+									results = jsonObject.get("results");
+								} else {
+									results = json;
+								}
+							} else {
+								results = json;
+							}
+						} catch (Exception e) {
+							callback.onCompleted(
+									null,
+									0,
+									new MobileServiceException(
+											"Error while retrieving data from response.",
+											e), response);
+							return;
+						}
+
+						callback.onCompleted(results, count, null, response);
+
+					} else {
+						callback.onCompleted(null, 0, mTaskException, response);
+					}
+				}
+			}
+		}.execute();
+	}
+	
+	public void executeInsertUpdateRequest(ServiceFilterRequest request,
+			final TableJsonOperationCallback callback) {
+		new RequestAsyncTask(request, mClient.createConnection()) {
+			@Override
+			protected void onPostExecute(ServiceFilterResponse result) {
+				if (callback != null) {
+					JsonObject newEntityJson = null;
+					if (mTaskException == null && result != null) {
+						String content = null;
+						content = result.getContent();
+						newEntityJson = new JsonParser().parse(content)
+								.getAsJsonObject();
+						callback.onCompleted(newEntityJson, null, result);
+
+					} else {
+						callback.onCompleted(null, mTaskException, result);						
+					}
 				}
 			}
 		}.execute();
@@ -292,9 +377,11 @@ abstract class MobileServiceTableBase<E> {
 		JsonObject patchedEntityJson = (JsonObject) new JsonParser()
 				.parse(originalEntity.toString());
 
+		
 		for (Map.Entry<String, JsonElement> entry : newEntity.entrySet()) {
 			patchedEntityJson.add(entry.getKey(), entry.getValue());
 		}
+		
 
 		return patchedEntityJson;
 	}
