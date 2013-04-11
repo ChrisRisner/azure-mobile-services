@@ -125,7 +125,7 @@ class ServiceFilterRequestImpl implements ServiceFilterRequest {
 	private TableJsonOperationCallback mPreviousCallback;
 	private TableJsonQueryCallback mPreviousQueryCallback;
 	private TableDeleteCallback mPreviousDeleteCallback;
-	private String mPreviousCallType;
+	private MobileServiceRequestType mPreviousCallType;
 	private MobileServiceTableBase mPreviousMobileServiceTableBase;
 	
 	public ServiceFilterRequest getPreviousRequest() { return mPreviousFilterRequest; }
@@ -136,8 +136,8 @@ class ServiceFilterRequestImpl implements ServiceFilterRequest {
 	public void setPreviousQueryCallback(TableJsonQueryCallback callback) { this.mPreviousQueryCallback = callback; }
 	public TableDeleteCallback getPreviousDeleteCallback() { return this.mPreviousDeleteCallback; }
 	public void setPreviousDeleteCallback(TableDeleteCallback callback) { this.mPreviousDeleteCallback = callback; }
-	public String getPreviousCalltype() { return this.mPreviousCallType; }
-	public void setPreviousCalltype(String calltype) { this.mPreviousCallType = calltype; }
+	public MobileServiceRequestType getPreviousCalltype() { return this.mPreviousCallType; }
+	public void setPreviousCalltype(MobileServiceRequestType calltype) { this.mPreviousCallType = calltype; }
 	public MobileServiceTableBase getPreviousRequestTable() { return this.mPreviousMobileServiceTableBase; }
 	public void setPreviousRequestTable(MobileServiceTableBase mobileServiceTableBase) { this.mPreviousMobileServiceTableBase = mobileServiceTableBase; }
 	

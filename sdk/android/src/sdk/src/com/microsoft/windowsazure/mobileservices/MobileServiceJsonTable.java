@@ -231,7 +231,7 @@ MobileServiceTableBase<TableJsonQueryCallback> {
 			return;
 		}
 
-		post.setPreviousCalltype("INSERT");
+		post.setPreviousCalltype(MobileServiceRequestType.INSERT);
 		post.setPreviousRequestTable(this);
 		executeTableOperation(post, new TableJsonOperationCallback() {
 
@@ -322,7 +322,7 @@ MobileServiceTableBase<TableJsonQueryCallback> {
 			}
 			return;
 		}
-		patch.setPreviousCalltype("UPDATE");
+		patch.setPreviousCalltype(MobileServiceRequestType.UPDATE);
 		patch.setPreviousRequestTable(this);
 		executeTableOperation(patch, new TableJsonOperationCallback() {
 
@@ -378,7 +378,7 @@ MobileServiceTableBase<TableJsonQueryCallback> {
 		//TODO:Test
 		request.setPreviousRequest(request);
 		request.setPreviousQueryCallback(callback);
-		request.setPreviousCalltype("GET");
+		request.setPreviousCalltype(MobileServiceRequestType.GET);
 		request.setPreviousRequestTable(this);
 				
 		// Create AsyncTask to execute the request and parse the results

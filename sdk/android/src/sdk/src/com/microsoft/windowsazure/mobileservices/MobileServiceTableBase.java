@@ -268,7 +268,7 @@ public abstract class MobileServiceTableBase<E> {
 		//TODO:TEST
 		delete.setPreviousRequest(delete);
 		delete.setPreviousDeleteCallback(callback);
-		delete.setPreviousCalltype("DELETE");
+		delete.setPreviousCalltype(MobileServiceRequestType.DELETE);
 		delete.setPreviousRequestTable(this);
 
 		// Create AsyncTask to execute the request

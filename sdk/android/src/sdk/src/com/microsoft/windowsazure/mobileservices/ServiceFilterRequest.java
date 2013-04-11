@@ -104,8 +104,8 @@ public interface ServiceFilterRequest {
 	public void setPreviousQueryCallback(TableJsonQueryCallback callback);
 	public TableDeleteCallback getPreviousDeleteCallback();
 	public void setPreviousDeleteCallback(TableDeleteCallback callback);
-	public String getPreviousCalltype();
-	public void setPreviousCalltype(String calltype);
+	public MobileServiceRequestType getPreviousCalltype();
+	public void setPreviousCalltype(MobileServiceRequestType calltype);
 	public MobileServiceTableBase getPreviousRequestTable();
 	public void setPreviousRequestTable(MobileServiceTableBase mobileServiceTableBase);
 	
