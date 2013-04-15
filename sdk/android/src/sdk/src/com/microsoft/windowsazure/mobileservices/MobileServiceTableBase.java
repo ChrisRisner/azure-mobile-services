@@ -265,7 +265,7 @@ public abstract class MobileServiceTableBase<E> {
 			return;
 		}
 		
-		//TODO:TEST
+		// Set previous request and callback for retry
 		delete.setPreviousRequest(delete);
 		delete.setPreviousDeleteCallback(callback);
 		delete.setPreviousCalltype(MobileServiceRequestType.DELETE);

@@ -120,7 +120,7 @@ class ServiceFilterRequestImpl implements ServiceFilterRequest {
 		return mRequest.getMethod();
 	}
 	
-	//TODO:TEST
+	// Fields for tracking previous request type and callback
 	private ServiceFilterRequest mPreviousFilterRequest;
 	private TableJsonOperationCallback mPreviousCallback;
 	private TableJsonQueryCallback mPreviousQueryCallback;

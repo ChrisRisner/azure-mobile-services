@@ -352,7 +352,7 @@ MobileServiceTableBase<TableJsonQueryCallback> {
 	 */
 	private void executeTableOperation(ServiceFilterRequest request,
 			final TableJsonOperationCallback callback) {
-		//TODO:Test
+		// Set previous request and callback for retry
 		request.setPreviousRequest(request);
 		request.setPrevoiusCallback(callback);
 		
@@ -375,7 +375,7 @@ MobileServiceTableBase<TableJsonQueryCallback> {
 		ServiceFilterRequest request = new ServiceFilterRequestImpl(
 				new HttpGet(url));
 
-		//TODO:Test
+		// Set previous request and callback for retry
 		request.setPreviousRequest(request);
 		request.setPreviousQueryCallback(callback);
 		request.setPreviousCalltype(MobileServiceRequestType.GET);
