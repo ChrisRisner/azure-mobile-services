@@ -26,8 +26,13 @@ import org.apache.http.Header;
 import org.apache.http.message.BasicHeader;
 
 import com.microsoft.windowsazure.mobileservices.MobileServiceException;
+import com.microsoft.windowsazure.mobileservices.MobileServiceRequestType;
+import com.microsoft.windowsazure.mobileservices.MobileServiceTableBase;
 import com.microsoft.windowsazure.mobileservices.ServiceFilterRequest;
 import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
+import com.microsoft.windowsazure.mobileservices.TableDeleteCallback;
+import com.microsoft.windowsazure.mobileservices.TableJsonOperationCallback;
+import com.microsoft.windowsazure.mobileservices.TableJsonQueryCallback;
 
 public class ServiceFilterRequestMock implements ServiceFilterRequest {
 	private ServiceFilterResponse responseToUse;
@@ -110,5 +115,75 @@ public class ServiceFilterRequestMock implements ServiceFilterRequest {
 	public void setHasErrorOnExecute(Boolean hasErrorOnExecute) {
 		this.hasErrorOnExecute = hasErrorOnExecute;
 	}
+
+	@Override
+	public ServiceFilterRequest getPreviousRequest() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setPreviousRequest(ServiceFilterRequest request) {
+		// TODO Auto-generated method stub		
+	}
+
+	@Override
+	public TableJsonOperationCallback getPreviousCallback() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setPrevoiusCallback(TableJsonOperationCallback callback) {
+		// TODO Auto-generated method stub		
+	}
+
+	@Override
+	public TableJsonQueryCallback getPreviousQueryCallback() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setPreviousQueryCallback(TableJsonQueryCallback callback) {
+		// TODO Auto-generated method stub		
+	}
+
+	@Override
+	public TableDeleteCallback getPreviousDeleteCallback() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setPreviousDeleteCallback(TableDeleteCallback callback) {
+		// TODO Auto-generated method stub		
+	}
+
+	@Override
+	public MobileServiceRequestType getPreviousCalltype() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setPreviousCalltype(MobileServiceRequestType calltype) {
+		// TODO Auto-generated method stub		
+	}
+
+	@Override
+	public MobileServiceTableBase<?> getPreviousRequestTable() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setPreviousRequestTable(
+			MobileServiceTableBase<?> mobileServiceTableBase) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	
 
 }
