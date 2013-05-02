@@ -123,7 +123,7 @@ MobileServiceTableBase<TableJsonQueryCallback> {
 			public void onCompleted(JsonElement results, int count,
 					Exception exception, ServiceFilterResponse response) {
 				if (callback != null) {
-					if (exception == null) {
+					if (exception == null && results != null) {
 						if (results.isJsonArray()) { // empty result
 							callback.onCompleted(
 									null,
@@ -239,7 +239,7 @@ MobileServiceTableBase<TableJsonQueryCallback> {
 			public void onCompleted(JsonObject jsonEntity, Exception exception,
 					ServiceFilterResponse response) {
 				if (callback != null) {
-					if (exception == null) {
+					if (exception == null && jsonEntity != null) {
 						JsonObject patchedJson = patchOriginalEntityWithResponseEntity(
 								element, jsonEntity);
 
@@ -330,7 +330,7 @@ MobileServiceTableBase<TableJsonQueryCallback> {
 			public void onCompleted(JsonObject jsonEntity, Exception exception,
 					ServiceFilterResponse response) {
 				if (callback != null) {
-					if (exception == null) {
+					if (exception == null && jsonEntity != null) {
 						JsonObject patchedJson = patchOriginalEntityWithResponseEntity(
 								element, jsonEntity);
 						callback.onCompleted(patchedJson, exception, response);
